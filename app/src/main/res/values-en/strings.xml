@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GrapheGarconKnab</string>
+    <string name="action_reset">Reset graph</string>
+    <string name="action_ajouter">Add node</string>
+    <string name="action_ajouter_arc">Add arc</string>
+    <string name="action_sup_noeud">Delete node</string>
+    <string name="action_envoie">Send by email</string>
+    <string name="entrer_mail">Enter your email adress</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="imgJpg">image/jpg</string>
+    <string name="mail_subject">Graph of the app GrapheGarconKnab</string>
+    <string name="send_mail">Send email...</string>
+    <string name="not_app">Not applies</string>
+</resources>
