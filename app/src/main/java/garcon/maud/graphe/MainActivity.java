@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Vibrator;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +30,7 @@ import java.nio.file.Files;
 /**
  * Created by Maud Garçon & Saly Knab on 10/10/2019.
  *
- * TODO : V1  ne pas sortir de l'ecran + envoyer le graphe par mail + edition en sous menu arc et noeud (lieste arc dans les noeuds)
+ * TODO : V1 edition en sous menu arc et noeud (lieste arc dans les noeuds)
  * TODO : V2 landscape (prise en compte rotation) + etiquette des arcs parfaitement dessiné + sauvegarde/import de graphe + changer la courbure de l'arc lors du touché + arc orienté (+ arc courbé) + arc en mode tiré
  */
 
@@ -113,9 +115,13 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_MOVE:
                         //si on a un noeud selectionne et en mode normal
                         if (mode == Mode.NORMAL && noeudSelec1 != null){
-                            //on deplace le noeud suivant les nouvelles coordonnees
-                            noeudSelec1.setX(x- noeudSelec1.getTailleNoeud()/2);
-                            noeudSelec1.setY(y- noeudSelec1.getTailleNoeud()/2);
+                            //on deplace le noeud suivant les nouvelles coordonnees et il ne peut pas sortir de l'image view
+                            if(y>noeudSelec1.getTailleNoeud()/2 && y<imageGraph.getMeasuredHeight()-noeudSelec1.getTailleNoeud()/2){
+                                noeudSelec1.setY(y- noeudSelec1.getTailleNoeud()/2);
+                            }
+                            if (x>noeudSelec1.getTailleNoeud()/2 && x<imageGraph.getMeasuredWidth()-noeudSelec1.getTailleNoeud()/2){
+                                noeudSelec1.setX(x- noeudSelec1.getTailleNoeud()/2);
+                            }
                             //on met a jour l'affichage
                             imageGraph.invalidate();
                             return true;
@@ -207,29 +213,34 @@ public class MainActivity extends AppCompatActivity {
 
                 try{
                     //capturer le graphe dans un Bitmap
-                    imageGraph.getRootView().setDrawingCacheEnabled(true);
-                    Bitmap bm = imageGraph.getRootView().getDrawingCache();
+                    imageGraph.setDrawingCacheEnabled(true);
+                    Bitmap bm = imageGraph.getDrawingCache();
+
                     //Enregistrer la photo
                     String parentPath = getApplicationContext().getFilesDir().getPath();
                     File outputDossier = new File(parentPath);
+
                     //boolean bool = outputDossier.mkdirs();
                     File outputFichier = new File(outputDossier, "screenshot.jpg");
                     FileOutputStream fichierOutputStream = new FileOutputStream(outputFichier);
+
                     //on compresse le bitmap en jpeg
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, fichierOutputStream);
 
                     //envoie du mail
                     Intent it = new Intent(Intent.ACTION_SEND);
                     it.setType(getString(R.string.imgJpg));
+
                     //ajouter pj
-                    it.putExtra(Intent.EXTRA_STREAM, outputFichier);
-                    //TODO : mettre fichier en piece jointe
+                    it.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(MainActivity.this, "garcon.maud.graphe.fileprovider", outputFichier));
+                    imageGraph.setDrawingCacheEnabled(false);
                     it.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject));
                     startActivity(Intent.createChooser(it, getString(R.string.send_mail)));
 
                 }catch (IOException e){
                     Toast.makeText(MainActivity.this, R.string.not_app, Toast.LENGTH_SHORT).show();
                 }
+                break;
         }
 
         return super.onOptionsItemSelected(item);

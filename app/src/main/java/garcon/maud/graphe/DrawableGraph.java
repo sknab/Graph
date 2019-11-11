@@ -3,6 +3,7 @@ package garcon.maud.graphe;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -63,6 +64,6 @@ public class DrawableGraph extends Drawable {
 
     @Override
     public int getOpacity() {
-        return 0;
+        return PixelFormat.OPAQUE;
     }
 }
