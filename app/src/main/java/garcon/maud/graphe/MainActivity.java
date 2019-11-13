@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 /**
- * Created by Maud Garçon & Saly Knab on 10/10/2019.
+ * Created by Maud Garçon & Saly Knab
  *
  * TODO : V1 edition en sous menu arc et noeud (lieste arc dans les noeuds)
  * TODO : V2 landscape (prise en compte rotation) + etiquette des arcs parfaitement dessiné + sauvegarde/import de graphe + changer la courbure de l'arc lors du touché + arc orienté (+ arc courbé) + arc en mode tiré
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                             noeudSelec1 = noeud;
                                             //le noeud passe en selectionnée
                                             noeud.setSelected(true);
-                                            //mettre a jouter la vue
+                                            //mettre a jour la vue
                                             imageGraph.invalidate();
                                         }
                                         else {
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         switch (mode) {
                             case NORMAL:
-                                //si mode normal le noeud selectionné redevient null
+                                //si mode normal le noeud selectionne redevient null
                                 noeudSelec1 = null;
                                 break;
                             case AJOUT_ARC:
